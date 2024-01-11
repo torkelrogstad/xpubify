@@ -25,8 +25,8 @@ func TestToXpub(t *testing.T) {
 			}
 
 			if converted != testcase.output {
-				t.Errorf("expected: \t%s", testcase.output)
-				t.Errorf("got:\t%s", converted)
+				t.Errorf("expected:\t%s", testcase.output)
+				t.Errorf("got:\t\t%s", converted)
 			}
 		})
 	}

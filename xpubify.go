@@ -3,12 +3,11 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-
 	"github.com/btcsuite/btcd/btcutil/base58"
 )
 
 func toXpub(in string) (string, error) {
-	decoded, version, err := base58.CheckDecode(in)
+	decoded, _, err := base58.CheckDecode(in)
 	if err != nil {
 		return "", fmt.Errorf("invalid base58 input: %w", err)
 	}
@@ -20,6 +19,7 @@ func toXpub(in string) (string, error) {
 
 	// Remove the old prefix
 	data := decoded[3:]
+	const version = 4 // xpub version is always 4
 
 	return base58.CheckEncode(append(xpubPrefix, data...), version), nil
 }
