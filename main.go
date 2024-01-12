@@ -15,6 +15,8 @@ func main() {
 
 func realMain() error {
 	flag.Parse()
+	flag.CommandLine.SetOutput(os.Stdout)
+
 	if flag.NArg() != 1 {
 		return errors.New("expects exactly 1 argument")
 	}
@@ -24,6 +26,6 @@ func realMain() error {
 		return fmt.Errorf("convert to xpub: %w", err)
 	}
 
-	fmt.Fprintln(flag.CommandLine.Output(), converted)
-	return nil
+	_, err = fmt.Fprintln(flag.CommandLine.Output(), converted)
+	return err
 }
