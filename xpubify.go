@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 
@@ -26,6 +27,14 @@ func toXpub(in string) (string, error) {
 
 	return base58.CheckEncode(append(xpubPrefix, data...), version), nil
 }
+
+func serializeParentFingerprint(value uint32) string {
+	buf := make([]byte, 4)
+	binary.BigEndian.PutUint32(buf, value)
+	return hex.EncodeToString(buf)
+
+}
+
 func getFingerprint(ext *hdkeychain.ExtendedKey) (string, error) {
 
 	pub, err := ext.ECPubKey()

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -12,6 +13,7 @@ import (
 
 var (
 	fingerprint = flag.Bool("fingerprint", false, "Prepend fingerprint to output")
+	dumpJson    = flag.Bool("json", false, "dump all XPUB info as JSON")
 )
 
 func main() {
@@ -41,6 +43,16 @@ func realMain() error {
 	serializedFingerprint, err := getFingerprint(ext)
 	if err != nil {
 		return fmt.Errorf("get fingerprint: %w", err)
+	}
+
+	if *dumpJson {
+		out := map[string]any{
+			"fingerprint":       serializedFingerprint,
+			"parentFingerprint": serializeParentFingerprint(ext.ParentFingerprint()),
+			"xpub":              converted,
+			"depth":             ext.Depth(),
+		}
+		return json.NewEncoder(flag.CommandLine.Output()).Encode(out)
 	}
 
 	output := converted
